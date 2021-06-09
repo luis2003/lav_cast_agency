@@ -1,6 +1,6 @@
 import os
 from flask import Flask, request, abort, jsonify
-from models import setup_db, Movie
+from models import setup_db, Movie, Actor
 from flask_cors import CORS
 
 database_path = os.environ['DATABASE_URL']
@@ -28,6 +28,19 @@ def create_app(test_config=None):
 
         return jsonify({
             'movies': movies_dict
+        })
+
+    @app.route('/actors')
+    def get_actors():
+        actors = Actor.query.all()
+
+        if len(actors) == 0:
+            abort(404)
+
+        actors_dict = {actor.id: actor.name for actor in actors}
+
+        return jsonify({
+            'actors': actors_dict
         })
 
     return app
