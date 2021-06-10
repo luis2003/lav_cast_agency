@@ -31,16 +31,24 @@ class AgencyTestCase(unittest.TestCase):
 
     """
     TODO
-    Write at least one test for each test for successful operation and for expected errors.
+    Write at least one test for each endpoint for successful operation and for expected errors.
     """
 
-    def test_get_categories(self):
+    def test_get_movies(self):
         res = self.client().get('/movies')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['movies'])
         self.assertTrue(len(data['movies']))
+
+    def test_get_actors(self):
+        res = self.client().get('/actors')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['actors'])
+        self.assertTrue(len(data['actors']))
 
 
 if __name__ == "__main__":
