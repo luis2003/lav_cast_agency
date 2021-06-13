@@ -1,7 +1,15 @@
 from flask_sqlalchemy import SQLAlchemy
 import os
+from dotenv import load_dotenv
 
-database_path = os.environ['DATABASE_URL']
+load_dotenv()
+
+user_name = os.environ.get('DB_USER')
+password = os.environ.get('DB_PASSWORD')
+
+database_name = "lav_cast_agency"
+database_path = "postgresql://" + user_name + ":" + password + "@{}/{}".format('localhost:5432', database_name)
+# database_path = os.environ['DATABASE_URL']
 
 db = SQLAlchemy()
 '''
@@ -15,7 +23,7 @@ def setup_db(app, database_path=database_path):
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
-
+    db.create_all()
 
 '''
 Actor_Movie
