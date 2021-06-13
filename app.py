@@ -1,6 +1,6 @@
 import os
 from flask import Flask, request, abort, jsonify
-from models import setup_db, Movie, Actor
+from models import setup_db, db, Movie, Actor
 from flask_cors import CORS
 
 database_path = os.environ['DATABASE_URL']
@@ -42,6 +42,37 @@ def create_app(test_config=None):
         return jsonify({
             'actors': actors_dict
         })
+
+    @app.route('/movies', methods=['POST'])
+    def create_movie():
+        body = request.get_json()
+
+        for value in body:
+            if value == "":
+                abort(422)
+
+        new_movie_title = body.get('title', None)
+        new_movie_release_date = body.get('release_date', None)
+
+        if not new_movie_title or not new_movie_release_date:
+            abort(422)
+
+        try:
+            new_movie = Movie(title=new_movie_title,
+                              release_date=new_movie_release_date)
+
+            db.session.add(new_movie)
+            db.session.commit()
+            return jsonify({
+                'success': True
+            })
+
+        except ValueError as e:
+            db.session.rollback()
+            print(e)
+            abort(422)
+        finally:
+            db.session.close()
 
     return app
 
