@@ -1,0 +1,3 @@
+curl -d '{"title":"Dune", "release_date":"1984-12-14"}' -H "Content-Type: application/json" -X POST http://localhost:5000/movies
+
+curl -d '{"name":"Will Patton", "age":67, "gender":"male"}' -H "Content-Type: application/json" -X POST http://localhost:5000/actors

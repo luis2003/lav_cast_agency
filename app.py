@@ -54,7 +54,7 @@ def create_app(test_config=None):
         new_movie_title = body.get('title', None)
         new_movie_release_date = body.get('release_date', None)
 
-        if not new_movie_title or not new_movie_release_date:
+        if not new_movie_title:
             abort(422)
 
         try:
@@ -62,6 +62,39 @@ def create_app(test_config=None):
                               release_date=new_movie_release_date)
 
             db.session.add(new_movie)
+            db.session.commit()
+            return jsonify({
+                'success': True
+            })
+
+        except ValueError as e:
+            db.session.rollback()
+            print(e)
+            abort(422)
+        finally:
+            db.session.close()
+
+    @app.route('/actors', methods=['POST'])
+    def create_actor():
+        body = request.get_json()
+
+        for value in body:
+            if value == "":
+                abort(422)
+
+        new_actor_name = body.get('name', None)
+        new_actor_age = body.get('age', None)
+        new_actor_gender = body.get('gender', None)
+
+        if not new_actor_name:
+            abort(422)
+
+        try:
+            new_actor = Actor(name=new_actor_name,
+                              age=new_actor_age,
+                              gender=new_actor_gender)
+
+            db.session.add(new_actor)
             db.session.commit()
             return jsonify({
                 'success': True
