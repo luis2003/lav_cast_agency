@@ -48,6 +48,24 @@ class Movie(db.Model):
     actors = db.relationship('Actor', secondary=actor_movie, lazy='subquery',
                              backref=db.backref('movies', lazy=True))
 
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def format(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'release_date': self.release_date
+        }
+
     def __repr__(self):
         return '<Title %r>' % self.title
 
@@ -63,6 +81,25 @@ class Actor(db.Model):
     name = db.Column(db.String(255), nullable=False)
     age = db.Column(db.Integer, nullable=True)
     gender = db.Column(db.String(25), nullable=True)
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def format(self):
+        return {
+            'id': self.id,
+            'name': self.title,
+            'age': self.age,
+            'gender': self.gender
+        }
 
     def __repr__(self):
         return '<name %r>' % self.name
