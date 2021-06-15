@@ -107,6 +107,63 @@ def create_app(test_config=None):
         finally:
             db.session.close()
 
+    # Error Handling
+    '''
+    Utilize the @app.errorhandler decorator to format error responses as 
+    JSON objects for at least four different status codes
+    '''
+
+    @app.errorhandler(422)
+    def unprocessable(error):
+        return jsonify({
+            "success": False,
+            "error": 422,
+            "message": "unprocessable"
+        }), 422
+
+    @app.errorhandler(405)
+    def method_not_allowed(error):
+        return jsonify({
+            "success": False,
+            "error": 405,
+            "message": "Method Not Allowed"
+        }), 405
+
+    @app.errorhandler(401)
+    def unauthorized(error):
+        return jsonify({
+            "success": False,
+            "error": 401,
+            "message": "unauthorized"
+        }), 401
+
+    @app.errorhandler(400)
+    def bad_request(error):
+        return jsonify({
+            "success": False,
+            "error": 400,
+            "message": "Bad Request"
+        }), 400
+
+    @app.errorhandler(404)
+    def not_found(error):
+        return jsonify({
+            "success": False,
+            "error": 404,
+            "message": "resource not found"
+        }), 404
+
+    '''
+    @TODO (DONE) implement error handler for AuthError
+        error handler should conform to general task above
+    
+
+    @app.errorhandler(AuthError)
+    def autherror_handler(ex):
+        response = jsonify(ex.error)
+        response.status_code = ex.status_code
+        return response'''
+
     return app
 
 
