@@ -25,6 +25,26 @@ def setup_db(app, database_path=database_path):
     db.init_app(app)
     db.create_all()
 
+
+def db_drop_and_create_all():
+    db.drop_all()
+    db.create_all()
+
+
+def create_test_data():
+    a_movie = Movie(
+        title='TestDune',
+        release_date='1984-1-1'
+    )
+    a_movie.insert()
+    an_actor = Actor(
+        name='TestPaul',
+        age=15,
+        gender='male'
+    )
+    an_actor.insert()
+
+
 '''
 Actor_Movie
 helper table

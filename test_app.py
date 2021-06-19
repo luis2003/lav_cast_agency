@@ -4,7 +4,7 @@ import os
 from flask_sqlalchemy import SQLAlchemy
 
 from app import create_app
-from models import setup_db, Movie
+from models import setup_db, db_drop_and_create_all, create_test_data, Movie
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -31,8 +31,10 @@ class AgencyTestCase(unittest.TestCase):
         with self.app.app_context():
             self.db = SQLAlchemy()
             self.db.init_app(self.app)
-            # create all tables
-            self.db.create_all()
+
+        # drop and create all tables for TEST db
+        db_drop_and_create_all()
+        create_test_data()
 
     def tearDown(self):
         """Executed after reach test"""
@@ -44,8 +46,6 @@ class AgencyTestCase(unittest.TestCase):
     """
 
     def test_SUCCESS_get_movies(self):
-        '''self.db_aux = self.db
-        self.db = None'''
         res = self.client().get('/movies')
         data = json.loads(res.data)
 
@@ -53,7 +53,15 @@ class AgencyTestCase(unittest.TestCase):
         self.assertTrue(data['movies'])
         self.assertTrue(len(data['movies']))
 
-    def test__SUCCESS_get_actors(self):
+    def test_ERROR_get_movies(self):
+        db_drop_and_create_all()
+        res = self.client().get('/movies')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False)
+
+    def test_SUCCESS_get_actors(self):
         res = self.client().get('/actors')
         data = json.loads(res.data)
 
@@ -92,6 +100,12 @@ class AgencyTestCase(unittest.TestCase):
     def test_SUCCESS_patch_movie(self):
         res = self.client().patch('/movies/1', json={'title': 'TestPatchDune',
                                                     'release_date': '2021-10-1'})
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+
+    def test_SUCCESS_delete_movie(self):
+        res = self.client().delete('/movies/1')
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)

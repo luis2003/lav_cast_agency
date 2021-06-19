@@ -132,6 +132,16 @@ def create_app(test_config=None):
             logging.exception('An exception occurred while updating movie')
             abort(400)
 
+    @app.route('/movies/<int:movie_id>', methods=['DELETE'])
+    # @requires_auth('delete:drinks')
+    def delete_drink(movie_id): # def delete_drink(jwt, drink_id):
+        selection = Movie.query.filter(Movie.id == movie_id).all()
+        if len(selection) == 0:
+            abort(404)
+        selection[0].delete()
+        return jsonify({"success": True,
+                        "deleted": movie_id})
+
     # Error Handling
     '''
     Utilize the @app.errorhandler decorator to format error responses as 
