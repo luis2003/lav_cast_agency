@@ -2,6 +2,7 @@ import os
 from flask import Flask, request, abort, jsonify
 from models import setup_db, db, Movie, Actor
 from flask_cors import CORS
+import logging
 
 database_path = os.environ['DATABASE_URL']
 
@@ -61,8 +62,7 @@ def create_app(test_config=None):
             new_movie = Movie(title=new_movie_title,
                               release_date=new_movie_release_date)
 
-            db.session.add(new_movie)
-            db.session.commit()
+            new_movie.insert()
             return jsonify({
                 'success': True
             })
@@ -94,8 +94,7 @@ def create_app(test_config=None):
                               age=new_actor_age,
                               gender=new_actor_gender)
 
-            db.session.add(new_actor)
-            db.session.commit()
+            new_actor.insert()
             return jsonify({
                 'success': True
             })
@@ -106,6 +105,32 @@ def create_app(test_config=None):
             abort(422)
         finally:
             db.session.close()
+
+    @app.route('/movies/<int:movie_id>', methods=['PATCH'])
+    # @requires_auth('patch:drinks')
+    def patch_movie(movie_id):
+        body = request.get_json()
+
+        try:
+            movie_to_patch = Movie.query.filter(Movie.id == movie_id).one_or_none()
+            if movie_to_patch is None:
+                abort(404)
+
+            if 'title' in body:
+                movie_to_patch.title = str(body.get('title'))
+
+            if 'release_date' in body:
+                movie_to_patch.release_date = body.get('release_date')
+
+            movie_to_patch.update()
+            updated_movie = Movie.query.filter(Movie.id == movie_id).one_or_none()
+
+            return jsonify({"success": True,
+                            "movie": [updated_movie.format()]})
+
+        except Exception as E:
+            logging.exception('An exception occurred while updating movie')
+            abort(400)
 
     # Error Handling
     '''

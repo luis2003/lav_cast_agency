@@ -43,7 +43,9 @@ class AgencyTestCase(unittest.TestCase):
     Write at least one test for each endpoint for successful operation and for expected errors.
     """
 
-    def test_get_movies(self):
+    def test_SUCCESS_get_movies(self):
+        '''self.db_aux = self.db
+        self.db = None'''
         res = self.client().get('/movies')
         data = json.loads(res.data)
 
@@ -51,7 +53,7 @@ class AgencyTestCase(unittest.TestCase):
         self.assertTrue(data['movies'])
         self.assertTrue(len(data['movies']))
 
-    def test_get_actors(self):
+    def test__SUCCESS_get_actors(self):
         res = self.client().get('/actors')
         data = json.loads(res.data)
 
@@ -59,18 +61,40 @@ class AgencyTestCase(unittest.TestCase):
         self.assertTrue(data['actors'])
         self.assertTrue(len(data['actors']))
 
-    def test_post_new_movie(self):
+    def test_SUCCESS_post_new_movie(self):
         res = self.client().post('/movies', json={'title': 'TestDune',
                                                   'release_date': '1984-1-1'})
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
 
-    def test_post_new_movie_wo_title(self):
+    def test_ERROR_post_new_movie_wo_title(self):
         res = self.client().post('/movies', json={'release_date': '1984-1-1'})
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
+
+    def test_SUCCESS_post_new_actor(self):
+        res = self.client().post('/actors', json={'name': 'TestActor',
+                                                  'age': 20,
+                                                  'gender': 'Male'})
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+
+    def test_ERROR_post_new_actor_wo_name(self):
+        res = self.client().post('/actors', json={'age': 20,
+                                                  'gender': 'Male'})
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
+
+    def test_SUCCESS_patch_movie(self):
+        res = self.client().patch('/movies/1', json={'title': 'TestPatchDune',
+                                                    'release_date': '2021-10-1'})
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
 
 
 if __name__ == "__main__":
