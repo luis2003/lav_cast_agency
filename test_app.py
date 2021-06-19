@@ -59,6 +59,19 @@ class AgencyTestCase(unittest.TestCase):
         self.assertTrue(data['actors'])
         self.assertTrue(len(data['actors']))
 
+    def test_post_new_movie(self):
+        res = self.client().post('/movies', json={'title': 'TestDune',
+                                                  'release_date': '1984-1-1'})
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+
+    def test_post_new_movie_wo_title(self):
+        res = self.client().post('/movies', json={'release_date': '1984-1-1'})
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
+
 
 if __name__ == "__main__":
     unittest.main()
