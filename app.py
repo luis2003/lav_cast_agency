@@ -107,7 +107,7 @@ def create_app(test_config=None):
             db.session.close()
 
     @app.route('/movies/<int:movie_id>', methods=['PATCH'])
-    # @requires_auth('patch:drinks')
+    # @requires_auth('patch:movies')
     def patch_movie(movie_id):
         body = request.get_json()
 
@@ -132,9 +132,39 @@ def create_app(test_config=None):
             logging.exception('An exception occurred while updating movie')
             abort(400)
 
+    @app.route('/actors/<int:actor_id>', methods=['PATCH'])
+    # @requires_auth('patch:actors')
+    def patch_actor(actor_id):
+        body = request.get_json()
+
+        try:
+            actor_to_patch = Actor.query.filter(Actor.id == actor_id).one_or_none()
+            if actor_to_patch is None:
+                abort(404)
+
+            if 'name' in body:
+                actor_to_patch.name = str(body.get('name'))
+
+            if 'age' in body:
+                actor_to_patch.age = body.get('age')
+
+            if 'gender' in body:
+                actor_to_patch.gender = body.get('gender')
+
+            actor_to_patch.update()
+            updated_actor = Actor.query.filter(Actor.id == actor_id).one_or_none()
+
+            return jsonify({"success": True,
+                            "actor": [updated_actor.format()]})
+
+        except Exception as E:
+            logging.exception('An exception occurred while updating actor')
+            abort(400)
+
+
     @app.route('/movies/<int:movie_id>', methods=['DELETE'])
     # @requires_auth('delete:drinks')
-    def delete_drink(movie_id): # def delete_drink(jwt, drink_id):
+    def delete_movie(movie_id): # def delete_drink(jwt, drink_id):
         selection = Movie.query.filter(Movie.id == movie_id).all()
         if len(selection) == 0:
             abort(404)

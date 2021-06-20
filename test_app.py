@@ -99,10 +99,34 @@ class AgencyTestCase(unittest.TestCase):
 
     def test_SUCCESS_patch_movie(self):
         res = self.client().patch('/movies/1', json={'title': 'TestPatchDune',
-                                                    'release_date': '2021-10-1'})
+                                                     'release_date': '2021-10-1'})
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
+
+    def test_ERROR_patch_movie(self):
+        # deleting nonexistent movie
+        res = self.client().patch('/movies/-33', json={'title': 'TestPatchDune',
+                                                     'release_date': '2021-10-1'})
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False)
+
+    def test_SUCCESS_patch_actor(self):
+        res = self.client().patch('/actors/1', json={'name': 'NewName',
+                                                     'age': '25',
+                                                     'gender': 'NewGender'})
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+
+    def test_ERROR_patch_actor(self):
+        res = self.client().patch('/actors/-33', json={'name': 'NewName',
+                                                     'age': '25',
+                                                     'gender': 'NewGender'})
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False)
 
     def test_SUCCESS_delete_movie(self):
         res = self.client().delete('/movies/1')
