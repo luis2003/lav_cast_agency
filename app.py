@@ -161,9 +161,8 @@ def create_app(test_config=None):
             logging.exception('An exception occurred while updating actor')
             abort(400)
 
-
     @app.route('/movies/<int:movie_id>', methods=['DELETE'])
-    # @requires_auth('delete:drinks')
+    # @requires_auth('delete:movies')
     def delete_movie(movie_id): # def delete_drink(jwt, drink_id):
         selection = Movie.query.filter(Movie.id == movie_id).all()
         if len(selection) == 0:
@@ -171,6 +170,16 @@ def create_app(test_config=None):
         selection[0].delete()
         return jsonify({"success": True,
                         "deleted": movie_id})
+
+    @app.route('/actors/<int:actor_id>', methods=['DELETE'])
+    # @requires_auth('delete:actors')
+    def delete_actor(actor_id): # def delete_drink(jwt, drink_id):
+        selection = Actor.query.filter(Actor.id == actor_id).all()
+        if len(selection) == 0:
+            abort(404)
+        selection[0].delete()
+        return jsonify({"success": True,
+                        "deleted": actor_id})
 
     # Error Handling
     '''

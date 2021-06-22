@@ -45,7 +45,7 @@ class AgencyTestCase(unittest.TestCase):
     Write at least one test for each endpoint for successful operation and for expected errors.
     """
 
-    def test_SUCCESS_get_movies(self):
+    def test_SUCCESS_GET_movies(self):
         res = self.client().get('/movies')
         data = json.loads(res.data)
 
@@ -53,7 +53,7 @@ class AgencyTestCase(unittest.TestCase):
         self.assertTrue(data['movies'])
         self.assertTrue(len(data['movies']))
 
-    def test_ERROR_get_movies(self):
+    def test_ERROR_GET_movies_empty_db(self):
         db_drop_and_create_all()
         res = self.client().get('/movies')
         data = json.loads(res.data)
@@ -61,7 +61,7 @@ class AgencyTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
 
-    def test_SUCCESS_get_actors(self):
+    def test_SUCCESS_GET_actors(self):
         res = self.client().get('/actors')
         data = json.loads(res.data)
 
@@ -69,20 +69,28 @@ class AgencyTestCase(unittest.TestCase):
         self.assertTrue(data['actors'])
         self.assertTrue(len(data['actors']))
 
-    def test_SUCCESS_post_new_movie(self):
+    def test_ERROR_GET_actors_empty_db(self):
+        db_drop_and_create_all()
+        res = self.client().get('/actors')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False)
+
+    def test_SUCCESS_POST_movie(self):
         res = self.client().post('/movies', json={'title': 'TestDune',
                                                   'release_date': '1984-1-1'})
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
 
-    def test_ERROR_post_new_movie_wo_title(self):
+    def test_ERROR_POST_movie_wo_title(self):
         res = self.client().post('/movies', json={'release_date': '1984-1-1'})
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
 
-    def test_SUCCESS_post_new_actor(self):
+    def test_SUCCESS_POST_actor(self):
         res = self.client().post('/actors', json={'name': 'TestActor',
                                                   'age': 20,
                                                   'gender': 'Male'})
@@ -90,21 +98,21 @@ class AgencyTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
 
-    def test_ERROR_post_new_actor_wo_name(self):
+    def test_ERROR_POST_actor_wo_name(self):
         res = self.client().post('/actors', json={'age': 20,
                                                   'gender': 'Male'})
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
 
-    def test_SUCCESS_patch_movie(self):
+    def test_SUCCESS_PATCH_movie(self):
         res = self.client().patch('/movies/1', json={'title': 'TestPatchDune',
                                                      'release_date': '2021-10-1'})
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
 
-    def test_ERROR_patch_movie(self):
+    def test_ERROR_PATCH_movie(self):
         # deleting nonexistent movie
         res = self.client().patch('/movies/-33', json={'title': 'TestPatchDune',
                                                      'release_date': '2021-10-1'})
@@ -112,7 +120,7 @@ class AgencyTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
 
-    def test_SUCCESS_patch_actor(self):
+    def test_SUCCESS_PATCH_actor(self):
         res = self.client().patch('/actors/1', json={'name': 'NewName',
                                                      'age': '25',
                                                      'gender': 'NewGender'})
@@ -120,7 +128,7 @@ class AgencyTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
 
-    def test_ERROR_patch_actor(self):
+    def test_ERROR_PATCH_actor(self):
         res = self.client().patch('/actors/-33', json={'name': 'NewName',
                                                      'age': '25',
                                                      'gender': 'NewGender'})
@@ -128,11 +136,29 @@ class AgencyTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
 
-    def test_SUCCESS_delete_movie(self):
+    def test_SUCCESS_DELETE_movie(self):
         res = self.client().delete('/movies/1')
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
+
+    def test_ERROR_DELETE_movie_wrong_id(self):
+        res = self.client().delete('/movies/-33')
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False)
+
+    def test_SUCCESS_DELETE_actor(self):
+        res = self.client().delete('/actors/1')
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+
+    def test_ERROR_DELETE_actor_wrong_id(self):
+        res = self.client().delete('/actors/-33')
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False)
 
 
 if __name__ == "__main__":
