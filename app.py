@@ -3,6 +3,8 @@ from flask import Flask, request, abort, jsonify
 from models import setup_db, db, Movie, Actor
 from flask_cors import CORS
 import logging
+from auth.auth import AuthError, requires_auth
+
 
 database_path = os.environ['DATABASE_URL']
 
@@ -14,6 +16,7 @@ def create_app(test_config=None):
     CORS(app)
 
     @app.route('/')
+    @requires_auth()
     def index():
         first_movie = Movie.query.first()
         return 'Hola Capstone! The first movie in the DB is: ' + first_movie.title
