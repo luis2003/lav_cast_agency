@@ -1,0 +1,1 @@
+https://dev-cdaq-due.us.auth0.com/authorize?audience=lav_cast_agency_API&response_type=token&client_id=nh03x0ps8ZydPAcjsRRtIJrbEhoDtPfb&redirect_uri=https://127.0.0.1:5000
