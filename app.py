@@ -230,16 +230,11 @@ def create_app(test_config=None):
             "message": "resource not found"
         }), 404
 
-    '''
-    @TODO (DONE) implement error handler for AuthError
-        error handler should conform to general task above
-    
-
     @app.errorhandler(AuthError)
     def autherror_handler(ex):
         response = jsonify(ex.error)
         response.status_code = ex.status_code
-        return response'''
+        return response
 
     return app
 
