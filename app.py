@@ -16,13 +16,13 @@ def create_app(test_config=None):
     CORS(app)
 
     @app.route('/')
-    @requires_auth()
     def index():
         first_movie = Movie.query.first()
         return 'Hola Capstone! The first movie in the DB is: ' + first_movie.title
 
     @app.route('/movies')
-    def get_movies():
+    @requires_auth('view:actors')
+    def get_movies(jwt):
         movies = Movie.query.all()
 
         if len(movies) == 0:
@@ -78,7 +78,8 @@ def create_app(test_config=None):
             db.session.close()
 
     @app.route('/actors', methods=['POST'])
-    def create_actor():
+    @requires_auth('add:actors')
+    def create_actor(jwt):
         body = request.get_json()
 
         for value in body:

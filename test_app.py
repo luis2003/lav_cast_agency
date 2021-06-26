@@ -18,6 +18,10 @@ class AgencyTestCase(unittest.TestCase):
 
     def setUp(self):
         """Define test variables and initialize app."""
+        self.casting_assistant = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImRJMGg4ZnV3V1Q0Z2o4MnZYNm9pdyJ9.eyJpc3MiOiJodHRwczovL2Rldi1jZGFxLWR1ZS51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjA5ODVlMmQ1N2FmMjEwMDY5YTcxN2JjIiwiYXVkIjoibGF2X2Nhc3RfYWdlbmN5X0FQSSIsImlhdCI6MTYyNDcxMDI4NCwiZXhwIjoxNjI0NzE3NDg0LCJhenAiOiJuaDAzeDBwczhaeWRQQWNqc1JSdElKcmJFaG9EdFBmYiIsInNjb3BlIjoiIiwicGVybWlzc2lvbnMiOlsidmlldzphY3RvcnMiLCJ2aWV3Om1vdmllcyJdfQ.XrBGb39Vr3QhLxwatjElQ0h3Uj_pnOlnO25P9ITJvnEWKZhAbxPgblRiGNuKG5ZLhrpz_RfZl4iJrSDQ2zXjsR5SW9l25Aw1iVFEYzam56pnG5Gp6c7RgS3CyBbxPZfBeIKxUBm_oQNzEcdUpGZBAQTJyIfXXJW3M4P0YzHlbqvzDLL7k40-S0OxZ-oFY-UwDIwPMfQ82V7nARiAdqWOmdDyHyWZ36zEI2C9QLpEKDbbrEGjfohzDoGYzdjJQ8Ae_U48-EDms09SXCs63pYuEmDafH8i_XkfwSXiMVcV_BaoZMSMZ7dH478feKnT3W5_ThUTHL_H_UqsVpq8OkDyWg'
+        self.new_actor = {'name': 'TestActor',
+                          'age': 20,
+                          'gender': 'Male'}
         self.app = create_app()
         self.client = self.app.test_client
         self.database_name = "lav_cast_agency_TEST"
@@ -91,9 +95,7 @@ class AgencyTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
 
     def test_SUCCESS_POST_actor(self):
-        res = self.client().post('/actors', json={'name': 'TestActor',
-                                                  'age': 20,
-                                                  'gender': 'Male'})
+        res = self.client().post('/actors', json=self.new_actor)
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
@@ -160,6 +162,57 @@ class AgencyTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
 
+    def test_ERROR_POST_actor_wo_permissions(self):
+        res = self.client().post('/actors',
+                                 headers={"Authorization": "Bearer {}".format(
+                                    self.casting_assistant)
+                                    }, json=self.new_actor)
+
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(data['message'], {
+        'code': 'unauthorized', 'description':
+        'Permission not found.'})
+'''
+def test_create_new_movies_executive_producer(self):
+
+res = self.client().post('/movies',
+
+headers={
+
+"Authorization": "Bearer {}".format(
+
+self.executive_producer)
+
+}, json=self.movies)
+
+data = json.loads(res.data)
+
+self.assertEqual(res.status_code, 200)
+
+self.assertEqual(data['success'], True)
+
+def test_create_new_movies_casting_assistant(self):
+
+res = self.client().post('/movies',
+
+headers={
+
+"Authorization": "Bearer {}".format(
+
+self.casting_assistant)
+
+}, json=self.movies)
+
+data = json.loads(res.data)
+
+self.assertEqual(res.status_code, 401)
+
+self.assertEqual(data['message'], {
+
+'code': 'unauthorized', 'description':
+
+'Permission not found.'})'''
 
 if __name__ == "__main__":
     unittest.main()
