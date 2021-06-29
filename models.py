@@ -10,7 +10,7 @@ password = os.environ.get('DB_PASSWORD')
 database_name = "lav_cast_agency"
 # database_path = "postgresql://" + user_name + ":" + password + "@{}/{}".format('localhost:5432', database_name)
 database_path = os.environ['DATABASE_URL']
-database_path.replace('postgres', 'postgresql')  # workaround to make it work in heroku
+database_path.replace('postgres://', 'postgresql://', 1)  # workaround to make it work in heroku
 
 db = SQLAlchemy()
 '''
