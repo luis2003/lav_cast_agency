@@ -5,8 +5,6 @@ from flask_cors import CORS
 import logging
 from auth.auth import AuthError, requires_auth
 
-database_path = os.environ['DATABASE_URL']
-
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)

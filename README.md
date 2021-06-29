@@ -1,14 +1,8 @@
-#README REQUIREMENTS FROM RUBRIC
-
-Deployment:
-    Application is hosted live at student provided URL::
-        URL is provided in project README
-
-Code Quality and Documentation:
-    Project includes thorough documentation::
-        hosting instructions,
-
 # CAPSTONE PROJECT: lav_cast_agency
+
+##Deployment
+Application is hosted live at following URL: https://lav-cast-agency.herokuapp.com/
+
 ##Motivation
 this is the capstone final project based on casting agency specifications. 
 The Casting Agency models a company that is responsible for creating movies and managing and assigning actors 
