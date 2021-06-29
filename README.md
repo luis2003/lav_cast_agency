@@ -88,3 +88,30 @@ modify:actors	(to edit an actor)
 modify:movies	(to edit a movie)	
 add:movies	(to add a movie)
 delete:movies	(to delete a movie)
+
+## Testing
+To run the tests, run
+```bash
+python test_app.py
+```
+
+##Endpoints
+GET /
+GET /actors 
+GET /movies
+DELETE /actors/<int:actor_id> 
+DELETE /movies/<int:movie_id>
+POST /actors 
+POST /movies
+PATCH /actors/<int:actor_id> 
+PATCH /movies/<int:movie_id>
+
+### GET / 
+#### Description
+index. basic sample endpoint
+#### Request Arguments
+None
+#### Returns
+
+#### Sample Request
+#### Sample Response
