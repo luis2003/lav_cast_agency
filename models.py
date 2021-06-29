@@ -8,8 +8,8 @@ user_name = os.environ.get('DB_USER')
 password = os.environ.get('DB_PASSWORD')
 
 database_name = "lav_cast_agency"
-database_path = "postgresql://" + user_name + ":" + password + "@{}/{}".format('localhost:5432', database_name)
-# database_path = os.environ['DATABASE_URL']
+# database_path = "postgresql://" + user_name + ":" + password + "@{}/{}".format('localhost:5432', database_name)
+database_path = os.environ['DATABASE_URL']
 
 db = SQLAlchemy()
 '''
