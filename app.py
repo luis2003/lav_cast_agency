@@ -5,13 +5,11 @@ from flask_cors import CORS
 import logging
 from auth.auth import AuthError, requires_auth
 
-database_path = os.environ['DATABASE_URL']
-database_path.replace('postgres://', 'postgresql://', 1)  # workaround to make it work in heroku
 
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
-    setup_db(app, database_path)
+    setup_db(app)
     CORS(app)
 
     @app.route('/')
