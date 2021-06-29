@@ -20,6 +20,7 @@ setup_db(app)
 
 
 def setup_db(app, database_path=database_path):
+    database_path.replace('postgres://', 'postgresql://', 1)  # workaround to make it work in heroku
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
