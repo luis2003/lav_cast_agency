@@ -7,7 +7,6 @@ Deployment:
 Code Quality and Documentation:
     Project includes thorough documentation::
         hosting instructions,
-		○ Documentation of API behavior
 
 # CAPSTONE PROJECT: lav_cast_agency
 ##Motivation
@@ -96,22 +95,199 @@ python test_app.py
 ```
 
 ##Endpoints
-GET /
-GET /actors 
-GET /movies
-DELETE /actors/<int:actor_id> 
-DELETE /movies/<int:movie_id>
-POST /actors 
-POST /movies
-PATCH /actors/<int:actor_id> 
-PATCH /movies/<int:movie_id>
+1. GET /
+2. GET /actors 
+3. GET /movies
+4. DELETE /actors/<int:actor_id> 
+5. DELETE /movies/<int:movie_id>
+6. POST /actors 
+7. POST /movies
+8. PATCH /actors/<int:actor_id> 
+9. PATCH /movies/<int:movie_id>
 
-### GET / 
+### 1. GET /
 #### Description
 index. basic sample endpoint
 #### Request Arguments
 None
 #### Returns
-
+a text message including the first movie entry in database
 #### Sample Request
+```bash
+curl http://localhost:5000/
+```
 #### Sample Response
+"Hola Capstone! The first movie in the DB is: King Kong"
+
+### 2. GET /actors 
+#### Description
+Endpoint to see the names of all actors in the database.
+#### Request Arguments
+Requires a JWT from a user with a role/permission authorized to use this API (i.e. CASTING ASSISTANT,
+CASTING DIRECTOR or EXECUTIVE PRODUCER roles).
+#### Returns
+#### Sample Request
+```bash
+curl -H 'Accept: application/json' -H "Authorization: Bearer ${TOKEN}" http://localhost:5000/actors
+```
+#### Sample Response
+{
+  "actors": {
+    "1": "Tom",
+    "2": "Mary",
+    "3": "Ken",
+    "4": "Will Patton",
+    "5": "Will Patton"
+  }
+}
+
+### 3. GET /movies
+#### Description
+Endpoint to see the title of all movies in the database.
+#### Request Arguments
+Requires a JWT from a user with a role/permission authorized to use this API (i.e. CASTING ASSISTANT,
+CASTING DIRECTOR or EXECUTIVE PRODUCER roles).
+#### Returns
+A dictionary of key/value pairs with movie_id as key and title as value.
+#### Sample Request
+```bash
+curl -H 'Accept: application/json' -H "Authorization: Bearer ${TOKEN}" http://localhost:5000/movies
+```
+#### Sample Response
+{
+  "movies": {
+    "1": "King Kong",
+    "2": "Godzilla",
+    "3": "Shrek",
+    "4": "Dune",
+    "5": "PatchedDune"
+  }
+}
+
+### 4. DELETE /actors/<int:actor_id>  
+#### Description
+Removes a specific actor from the database.
+#### Request Arguments
+Actor ID as an integer as part of the URL.
+Requires a JWT from a user with a role/permission authorized to use this API (i.e. CASTING DIRECTOR or 
+EXECUTIVE PRODUCER roles).
+#### Returns
+A jsonify response containing if action was successful and id of the deleted item.
+#### Sample Request
+```bash
+curl -s -H 'Accept: application/json' -H "Authorization: Bearer ${TOKEN}" -X DELETE http://localhost:5000/actors/5
+```
+#### Sample Response
+{
+  "deleted": 5,
+  "success": true
+}
+
+### 5. DELETE /movies/<int:movie_id>
+#### Description
+Removes a specific actor from the database.
+#### Request Arguments
+Movie ID as an integer as part of the URL.
+Requires a JWT from a user with a role/permission authorized to use this API (i.e. EXECUTIVE PRODUCER role).
+#### Returns
+A jsonify response containing if action was successful and id of the deleted item.
+#### Sample Request
+```bash
+curl -s -H 'Accept: application/json' -H "Authorization: Bearer ${TOKEN}" -X DELETE http://localhost:5000/movies/5
+```
+#### Sample Response
+{
+  "deleted": 5,
+  "success": true
+}
+
+### 6. POST /actors 
+#### Description
+Adds a new actor to the database.
+#### Request Arguments
+A dictionary with actor name, age(optional) and gender(optional).
+Requires a JWT from a user with a role/permission authorized to use this API (i.e. CASTING DIRECTOR or 
+EXECUTIVE PRODUCER roles).
+#### Returns
+A jsonify response containing if action was successful.
+#### Sample Request
+```bash
+curl -s -d '{"name":"Will Patton", "age":67, "gender":"male"}' -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" -X POST http://localhost:5000/actors
+```
+#### Sample Response
+{
+  "success": true
+}
+
+### 7. POST /movies
+#### Description
+Adds a new movie to the database.
+#### Request Arguments
+A dictionary with movie title, and release date(optional).
+Requires a JWT from a user with a role/permission authorized to use this API (i.e. EXECUTIVE PRODUCER role).
+#### Returns
+A jsonify response containing if action was successful.
+#### Sample Request
+```bash
+curl -s -d '{"title":"Dune", "release_date":"1984-12-14"}' -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" -X POST http://localhost:5000/movies
+```
+#### Sample Response
+{
+  "success": true
+}
+
+### 8. PATCH /actors/<int:actor_id>
+#### Description
+Modifies the data of an existing actor in the database.
+#### Request Arguments
+Actor ID as an integer as part of the URL.
+A dictionary with actor data to modify and new values: name, age or gender.
+Requires a JWT from a user with a role/permission authorized to use this API (i.e. CASTING DIRECTOR or 
+EXECUTIVE PRODUCER roles).
+#### Returns
+A jsonify response containing if action was successful and a list containing a dictionary of the modified actor and
+its new data.
+#### Sample Request
+```bash
+curl -s -d '{"name":"PatchedWill Patton", "age":68, "gender":"male"}' -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" -X PATCH http://localhost:5000/actors/6
+```
+#### Sample Response
+{
+  "actor": [
+    {
+      "age": 68,
+      "gender": "male",
+      "id": 6,
+      "name": "PatchedWill Patton"
+    }
+  ],
+  "success": true
+}
+
+
+### 9. PATCH /movies/<int:movie_id>
+#### Description
+Modifies the data of an existing movie in the database.
+#### Request Arguments
+Movie ID as an integer as part of the URL.
+A dictionary with movie data to modify and new values: title or release_date.
+Requires a JWT from a user with a role/permission authorized to use this API (i.e. CASTING DIRECTOR or 
+EXECUTIVE PRODUCER roles).
+#### Returns
+A jsonify response containing if action was successful and a list containing a dictionary of the modified movie and
+its new data.
+#### Sample Request
+```bash
+curl -s -d '{"title":"PatchedDune", "release_date":"1985-12-14"}' -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" -X PATCH http://localhost:5000/movies/6
+```
+#### Sample Response
+{
+  "movie": [
+    {
+      "id": 6,
+      "release_date": "Sat, 14 Dec 1985 00:00:00 GMT",
+      "title": "PatchedDune"
+    }
+  ],
+  "success": true
+}

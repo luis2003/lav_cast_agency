@@ -1,7 +1,7 @@
-curl -d '{"title":"Dune", "release_date":"1984-12-14"}' -H "Content-Type: application/json" -X POST http://localhost:5000/movies
+curl -s -d '{"title":"Dune", "release_date":"1984-12-14"}' -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" -X POST http://localhost:5000/movies
 
-curl -d '{"title":"PatchedDune", "release_date":"1985-12-14"}' -H "Content-Type: application/json" -X PATCH http://localhost:5000/movies/5
+curl -s -d '{"title":"PatchedDune", "release_date":"1985-12-14"}' -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" -X PATCH http://localhost:5000/movies/6
 
-curl -d '{"name":"Will Patton", "age":67, "gender":"male"}' -H "Content-Type: application/json" -X POST http://localhost:5000/actors
+curl -s -d '{"name":"Will Patton", "age":67, "gender":"male"}' -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" -X POST http://localhost:5000/actors
 
-curl -d '{"name":"PatchedWill Patton", "age":68, "gender":"male"}' -H "Content-Type: application/json" -X POST http://localhost:5000/actors/5
+curl -s -d '{"name":"PatchedWill Patton", "age":68, "gender":"male"}' -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" -X PATCH http://localhost:5000/actors/6
