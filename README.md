@@ -1,29 +1,90 @@
-# lav_cast_agency
-
 #README REQUIREMENTS FROM RUBRIC
-API Architecture and Testing:
-    Enable Role Based Authentication and 
-    roles-based access control (RBAC) in a Flask application::
-	    • Project includes at least two different roles that have 
-        distinct permissions for actions. These roles and permissions are clearly
-        defined in the project README.
 
 Deployment:
     Application is hosted live at student provided URL::
         URL is provided in project README
-    Includes instructions to set up authentication::
-        Instructions are provided in README for setting up authentication so reviewers
-        can test endpoints at live application endpoint
 
 Code Quality and Documentation:
     Project includes thorough documentation::
-		○ Motivation for project
-		○ Project dependencies, local development and hosting instructions,
-		○ Detailed instructions for scripts to install any project dependencies, and to 
-        run the development server.
-		○ Documentation of API behavior and RBAC controls
+        hosting instructions,
+		○ Documentation of API behavior
 
-#README REQUIREMENTS FROM Submission instructions
-	• README which includes:
-		○ URL where the application is hosted
-        Instructions to set up authentication
+# CAPSTONE PROJECT: lav_cast_agency
+##Motivation
+this is the capstone final project based on casting agency specifications. 
+The Casting Agency models a company that is responsible for creating movies and managing and assigning actors 
+to those movies. 
+This system is created to simplify and streamline the process.
+
+## Getting Started
+
+### Installing Dependencies
+
+#### Python 3.7
+
+Follow instructions to install the latest version of python for your platform in the [python docs](https://docs.python.org/3/using/unix.html#getting-and-installing-the-latest-version-of-python)
+
+#### Virtual Environment
+
+We recommend working within a virtual environment whenever using Python for projects. This keeps your dependencies for each project separate and organized. Instructions for setting up a virtual environment for your platform can be found in the [python docs](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
+
+#### PIP Dependencies
+
+Once you have your virtual environment setup and running, install dependencies by running:
+
+```bash
+pip install -r requirements.txt
+```
+
+This will install all of the required packages we selected within the `requirements.txt` file.
+
+##### Key Dependencies
+
+- [Flask](http://flask.pocoo.org/) is a lightweight backend microservices framework. Flask is required to handle requests and responses.
+
+- [SQLAlchemy](https://www.sqlalchemy.org/) and [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/2.x/) are libraries to handle the lightweight sqlite database. Since we want you to focus on auth, we handle the heavy lift for you in `./src/database/models.py`. We recommend skimming this code first so you know how to interface with the Drink model.
+
+- [jose](https://python-jose.readthedocs.io/en/latest/) JavaScript Object Signing and Encryption for JWTs. Useful for encoding, decoding, and verifying JWTS.
+
+## Running the server
+
+Ensure you are working using your created virtual environment.
+
+Each time you open a new terminal session, run:
+
+```bash
+setup.sh
+```
+
+To run the server, execute:
+
+```bash
+flask run --reload
+```
+
+The `--reload` flag will detect file changes and restart the server automatically.
+
+### Authentication with Auth0
+valid JWT are provided as part of setup.sh to test endpoints
+
+## Roles & Permissions
+• Roles:
+	• Casting Assistant
+		○ Can view actors and movies
+	• Casting Director
+		○ All permissions a Casting Assistant has and…
+		○ Add or delete an actor from the database
+		○ Modify actors or movies
+	• Executive Producer
+		○ All permissions a Casting Director has and…
+        ○ Add or delete a movie from the database
+
+• Permissions:
+view:actors	(to read actors)	
+view:movies	(to read movies)
+add:actors	(to add an actor)	
+delete:actors	(to delete an actor)	
+modify:actors	(to edit an actor)
+modify:movies	(to edit a movie)	
+add:movies	(to add a movie)
+delete:movies	(to delete a movie)

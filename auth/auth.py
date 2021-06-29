@@ -173,9 +173,10 @@ def requires_auth(permission=''):
                 check_permissions(permission, payload)
 
             except Exception as e:
-                logging.exception('An exception occurred while in wrapper internal function')
-                # print(repr(e))
-                abort(401)
+                # logging.exception('An exception occurred while in wrapper internal function')
+                # print('HERE: '+str(e.status_code))
+                # abort(401)
+                abort(e.status_code)
 
             return f(payload, *args, **kwargs)
 
