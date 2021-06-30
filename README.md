@@ -1,9 +1,9 @@
 # CAPSTONE PROJECT: lav_cast_agency
 
-##Deployment
+## Deployment
 Application is hosted live at following URL: https://lav-cast-agency.herokuapp.com/
 tested 6/29/2021 8pmEST
-##Motivation
+## Motivation
 this is the capstone final project based on casting agency specifications. 
 The Casting Agency models a company that is responsible for creating movies and managing and assigning actors 
 to those movies. 
